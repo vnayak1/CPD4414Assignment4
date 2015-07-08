@@ -15,6 +15,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import DatabaseCredentials.database;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 /**
  * REST Web Service
  *
@@ -42,13 +45,24 @@ public class GenericResource {
      */
     @GET
     @Produces("application/json")
-    public String getJson() {
+    public String getJson() throws SQLException {
         //TODO return proper representation object
         //throw new UnsupportedOperationException();
 
          conn = database.getConnection();
-        if (conn == null)
+         String query ="select * from product";
+         
+         Statement  st = conn.createStatement();
+         ResultSet  rs = st.executeQuery(query);
+         
+         while(rs.next()){
+         
             
+              rs.getString("ProductID");
+             
+         }
+         
+        if (conn == null)
         {
         return "connection is not created";
         }
