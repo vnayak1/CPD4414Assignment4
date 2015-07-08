@@ -29,10 +29,10 @@ public class GenericResource {
     /**
      * Creates a new instance of GenericResource
      */
+    Connection conn;
     public GenericResource() {
         
-        database b = new database();
-        Connection conn = b.getConnection();
+     
         
     }
 
@@ -45,11 +45,16 @@ public class GenericResource {
     public String getJson() {
         //TODO return proper representation object
         //throw new UnsupportedOperationException();
+
+         conn = database.getConnection();
+        if (conn == null)
+            
+        {
+        return "connection is not created";
+        }
+        else{
         
-        
-          
-        
-        return "ddd";
+        return "connection is created";}
     }
 
     /**
