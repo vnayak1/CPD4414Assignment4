@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import javax.ws.rs.DELETE;
 import static javax.ws.rs.HttpMethod.POST;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.MediaType;
@@ -155,5 +156,79 @@ public class GenericResource {
         st.executeUpdate(query);
         
     }
+    
+    
+    
+     @PUT
+    @Path("/products")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+   
+    public void putProduct(String content) throws SQLException, ParseException
+    {
+            
+        JSONParser jp = new JSONParser();
+        JSONObject obj = (JSONObject) jp.parse(content);
+        
+        Object objid = obj.get("id");
+        String ProductID = objid.toString();
+        int id = Integer.parseInt(ProductID);
+        
+             Object objname = obj.get("name");
+        String name = objname.toString();
+        
+          Object objdes = obj.get("description");
+        String description = objdes.toString();
+        
+     
+        
+        Object objquantity = obj.get("quantity");
+        String quantity_new = objquantity.toString();
+        int quantity = Integer.parseInt(quantity_new);
+        
+        
+         conn = database.getConnection();
+        // String query ="";
+        String query="insert into product(ProductID, name, description, quantity) values('"+id+"','"+name+"','"+description+"','"+quantity+"')"; 
+        Statement  st = conn.createStatement();
+        st.executeUpdate(query);
+    
+    
+    }
+    
+    @DELETE
+    @Path("/products")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+   
+    public void deleteProduct(String content) throws SQLException, ParseException
+    {
+          
+        JSONParser jp = new JSONParser();
+        JSONObject obj = (JSONObject) jp.parse(content);
+        
+        Object objid = obj.get("id");
+        String ProductID = objid.toString();
+        int id = Integer.parseInt(ProductID);
+        
+             Object objname = obj.get("name");
+        String name = objname.toString();
+        
+          Object objdes = obj.get("description");
+        String description = objdes.toString();
+        
+     
+        
+        Object objquantity = obj.get("quantity");
+        String quantity_new = objquantity.toString();
+        int quantity = Integer.parseInt(quantity_new);
+        
+        
+         conn = database.getConnection();
+        // String query ="";
+        String query="insert into product(ProductID, name, description, quantity) values('"+id+"','"+name+"','"+description+"','"+quantity+"')"; 
+        Statement  st = conn.createStatement();
+        st.executeUpdate(query);
+        }
 }
     
