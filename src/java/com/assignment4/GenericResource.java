@@ -19,6 +19,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import static javax.ws.rs.HttpMethod.POST;
+import javax.ws.rs.POST;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import static javax.ws.rs.core.Response.status;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 /**
  * REST Web Service
  *
@@ -113,8 +122,38 @@ public class GenericResource {
      * @param content representation for the resource
      * @return an HTTP response with content of the updated or created resource.
      */
-    @PUT
+    @POST
+    @Path("/products1")
     @Consumes("application/json")
-    public void putJson(String content) {
+    @Produces(MediaType.TEXT_PLAIN)
+    public void postJson(String content) throws ParseException, SQLException {
+        
+        JSONParser jp = new JSONParser();
+        JSONObject obj = (JSONObject) jp.parse(content);
+        
+        Object objid = obj.get("id");
+        String ProductID = objid.toString();
+        int id = Integer.parseInt(ProductID);
+        
+             Object objname = obj.get("name");
+        String name = objname.toString();
+        
+          Object objdes = obj.get("description");
+        String description = objdes.toString();
+        
+     
+        
+        Object objquantity = obj.get("quantity");
+        String quantity_new = objquantity.toString();
+        int quantity = Integer.parseInt(quantity_new);
+        
+        
+         conn = database.getConnection();
+        // String query ="";
+        String query="insert into product(ProductID, name, description, quantity) values('"+id+"','"+name+"','"+description+"','"+quantity+"')"; 
+        Statement  st = conn.createStatement();
+        st.executeUpdate(query);
+        
     }
 }
+    
