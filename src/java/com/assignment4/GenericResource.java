@@ -18,12 +18,13 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 /**
  * REST Web Service
  *
  * @author vinayak
  */
-@Path("generic")
+@Path("product")
 public class GenericResource {
 
     @Context
@@ -33,10 +34,12 @@ public class GenericResource {
      * Creates a new instance of GenericResource
      */
     Connection conn;
+    
+    Product p = new Product();
+    ArrayList<Product> products= new ArrayList<>();
+    
     public GenericResource() {
-        
-     
-        
+             
     }
 
     /**
@@ -44,8 +47,9 @@ public class GenericResource {
      * @return an instance of java.lang.String
      */
     @GET
+    @Path("/products")
     @Produces("application/json")
-    public String getJson() throws SQLException {
+    public ArrayList<Product> getJson() throws SQLException {
         //TODO return proper representation object
         //throw new UnsupportedOperationException();
 
@@ -57,20 +61,53 @@ public class GenericResource {
          
          while(rs.next()){
          
-            
-              rs.getString("ProductID");
-             
+          Product  pnew = new Product(rs.getInt("ProductID"),rs.getString("name"),rs.getString("description"), rs.getInt("quantity"));
+          products.add(pnew);        
+                   
          }
-         
-        if (conn == null)
-        {
-        return "connection is not created";
-        }
-        else{
+//         
+//        if (conn == null)
+//        {
+//        return "connection is not created";
+//        }
+//        else{
+//        
+//        return "connection is created";}
         
-        return "connection is created";}
+        return products;
     }
-
+            
+    
+      @GET
+      @Path("/products/{productid}")
+      @Produces("application/json")
+        public ArrayList<Product> getJsonOne(@PathParam("productid") int productid) throws SQLException {
+        //TODO return proper representation object
+        //throw new UnsupportedOperationException();
+    
+         conn = database.getConnection();
+         String query ="";
+         
+         Statement  st = conn.createStatement();
+         ResultSet  rs = st.executeQuery("select * from product where ProductID="+productid);
+         
+         while(rs.next()){
+         
+          Product  pnew = new Product(rs.getInt("ProductID"),rs.getString("name"),rs.getString("description"), rs.getInt("quantity"));
+          products.add(pnew);        
+                   
+         }
+//         
+//        if (conn == null)
+//        {
+//        return "connection is not created";
+//        }
+//        else{
+//        
+//        return "connection is created";}
+        
+        return products;
+    }
     /**
      * PUT method for updating or creating an instance of GenericResource
      * @param content representation for the resource
